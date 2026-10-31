@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#030914;color:#00d9ff;
+ font-family:Arial,sans-serif;text-align:center;
+ min-height:100vh;display:flex;
+ align-items:center;justify-content:center;
+}
+.container{width:100%;padding:25px}
+h1{letter-spacing:8px;text-shadow:0 0 15px #00cfff}
+.core{
+ width:210px;height:210px;border-radius:50%;
+ margin:35px auto;border:3px solid #00d9ff;
+ box-shadow:0 0 20px #00d9ff,inset 0 0 25px #007bff;
+ display:flex;align-items:center;justify-content:center;
+ animation:pulse 2s infinite;
+}
+.core span{font-size:65px}
+@keyframes pulse{
+ 50%{box-shadow:0 0 45px #00d9ff,inset 0 0 35px #007bff}
+}
+button{
+ background:#003b60;color:#00eaff;
+ border:1px solid #00d9ff;padding:15px 25px;
+ border-radius:30px;font-size:17px;margin:8px;
+}
+#answer{
+ margin:25px auto;padding:15px;
+ border:1px solid #007bff;border-radius:12px;
+ min-height:60px;color:white;
+}
+.small{color:#75a9c5;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>J.A.R.V.I.S</h1>
+<p class="small">JUST A RATHER VERY INTELLIGENT SYSTEM</p>
+<div class="core"><span>◉</span></div>
+<h2 id="status">SYSTEM ONLINE</h2>
+<button onclick="startJarvis()">🎙️ TALK TO JARVIS</button>
+<button onclick="speak('Hello! I am JARVIS. How can I help you?')">🔊 SPEAK</button>
+<div id="answer">Hello Sir! I am ready.</div>
+<p class="small">JARVIS AI • VOICE SYSTEM</p>
+</div>
+<script>
+function speak(text){
+ document.getElementById("answer").innerText=text;
+ let msg=new SpeechSynthesisUtterance(text);
+ msg.lang="bn-IN";
+ speechSynthesis.speak(msg);
+}
+function startJarvis(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){speak("Voice recognition is not supported in this browser.");return;}
+ const rec=new SR();
+ rec.lang="bn-IN";
+ rec.onstart=()=>document.getElementById("status").innerText="LISTENING...";
+ rec.onend=()=>document.getElementById("status").innerText="SYSTEM ONLINE";
+ rec.onresult=(e)=>{
+  let q=e.results[0][0].transcript.toLowerCase();
+  let a="আপনার কথা শুনেছি। আরও AI ক্ষমতা শীঘ্রই যুক্ত হবে।";
+  if(q.includes("hello")||q.includes("হ্যালো"))a="হ্যালো স্যার! আমি জার্ভিস।";
+  else if(q.includes("নাম"))a="আমার নাম JARVIS।";
+  else if(q.includes("সময়")||q.includes("time"))a="এখন সময় "+new Date().toLocaleTimeString("bn-IN");
+  else if(q.includes("তারিখ"))a="আজ "+new Date().toLocaleDateString("bn-IN");
+  else if(q.includes("বন্ধ"))a="ঠিক আছে স্যার।";
+  speak(a);
+ };
+ rec.onerror=()=>speak("আবার চেষ্টা করুন স্যার।");
+ rec.start();
+}
+</script>
+</body>
+</html>
