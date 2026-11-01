@@ -5,92 +5,353 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JARVIS AI</title>
+
 <style>
 *{box-sizing:border-box}
+
 body{
- margin:0;background:#030914;color:#00d9ff;
- font-family:Arial,sans-serif;text-align:center;
- min-height:100vh;display:flex;
- align-items:center;justify-content:center;
+ margin:0;
+ background:#030914;
+ color:#00d9ff;
+ font-family:Arial,sans-serif;
+ text-align:center;
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
 }
-.container{width:100%;padding:25px}
-h1{letter-spacing:8px;text-shadow:0 0 15px #00cfff}
+
+.container{width:100%;padding:20px}
+
+h1{
+ letter-spacing:8px;
+ text-shadow:0 0 15px #00cfff;
+}
+
 .core{
- width:210px;height:210px;border-radius:50%;
- margin:35px auto;border:3px solid #00d9ff;
+ width:210px;
+ height:210px;
+ border-radius:50%;
+ margin:30px auto;
+ border:3px solid #00d9ff;
  box-shadow:0 0 20px #00d9ff,inset 0 0 25px #007bff;
- display:flex;align-items:center;justify-content:center;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  animation:pulse 2s infinite;
 }
+
 .core span{font-size:65px}
+
 @keyframes pulse{
- 50%{box-shadow:0 0 45px #00d9ff,inset 0 0 35px #007bff}
+ 50%{
+  box-shadow:0 0 45px #00d9ff,
+  inset 0 0 35px #007bff;
+ }
 }
+
 button{
- background:#003b60;color:#00eaff;
- border:1px solid #00d9ff;padding:15px 25px;
- border-radius:30px;font-size:17px;margin:8px;
+ background:#003b60;
+ color:#00eaff;
+ border:1px solid #00d9ff;
+ padding:14px 20px;
+ border-radius:30px;
+ font-size:16px;
+ margin:7px;
+ cursor:pointer;
 }
+
 #answer{
- margin:25px auto;padding:15px;
- border:1px solid #007bff;border-radius:12px;
- min-height:60px;color:white;
+ margin:20px auto;
+ padding:15px;
+ border:1px solid #007bff;
+ border-radius:12px;
+ min-height:60px;
+ color:white;
 }
+
 .small{color:#75a9c5;font-size:13px}
+
+#gemini{
+ background:#4285f4;
+ color:white;
+ border:0;
+}
+
 </style>
 </head>
+
 <body>
+
 <div class="container">
+
 <h1>J.A.R.V.I.S</h1>
-<p class="small">JUST A RATHER VERY INTELLIGENT SYSTEM</p>
+
+<p class="small">
+JUST A RATHER VERY INTELLIGENT SYSTEM
+</p>
+
 <div class="core"><span>◉</span></div>
+
 <h2 id="status">SYSTEM ONLINE</h2>
-<button onclick="startJarvis()">🎙️ TALK TO JARVIS</button>
-<button onclick="speak('Hello! I am JARVIS. How can I help you?')">🔊 SPEAK</button>
-<div id="answer">Hello Sir! I am ready.</div>
-<p class="small">JARVIS AI • VOICE SYSTEM</p>
-</div>
-<script>
-function speak(text){
- document.getElementById("answer").innerText=text;
- let msg=new SpeechSynthesisUtterance(text);
- msg.lang="bn-IN";
- speechSynthesis.speak(msg);
-}
-function startJarvis(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){speak("Voice recognition is not supported in this browser.");return;}
- const rec=new SR();
- rec.lang="bn-IN";
- rec.onstart=()=>document.getElementById("status").innerText="LISTENING...";
- rec.onend=()=>document.getElementById("status").innerText="SYSTEM ONLINE";
- rec.onresult=(e)=>{
-  let q=e.results[0][0].transcript.toLowerCase();
-  let a="আপনার কথা শুনেছি। আরও AI ক্ষমতা শীঘ্রই যুক্ত হবে।";
-  if(q.includes("hello")||q.includes("হ্যালো"))a="হ্যালো স্যার! আমি জার্ভিস।";
-  else if(q.includes("নাম"))a="আমার নাম JARVIS।";
-  else if(q.includes("সময়")||q.includes("time"))a="এখন সময় "+new Date().toLocaleTimeString("bn-IN");
-  else if(q.includes("তারিখ"))a="আজ "+new Date().toLocaleDateString("bn-IN");
-  else if(q.includes("বন্ধ"))a="ঠিক আছে স্যার।";
-  speak(a);
- };
- rec.onerror=()=>speak("আবার চেষ্টা করুন স্যার।");
- rec.start();
-}
-</script>
-</body><button onclick="openGemini()" 
-style="padding:15px 25px;
-background:#4285f4;
-color:white;
-border:0;
-border-radius:12px;
-font-size:18px;">
-🤖 Open Gemini
+
+<p>SELECT LANGUAGE</p>
+
+<button onclick="setLanguage('bn-IN')">
+বাংলা
 </button>
 
+<button onclick="setLanguage('en-IN')">
+English
+</button>
+
+<br>
+
+<button onclick="startJarvis()">
+🎙️ TALK TO JARVIS
+</button>
+
+<button onclick="stopJarvis()">
+⏹️ STOP
+</button>
+
+<button onclick="speak('Hello! I am JARVIS.')">
+🔊 SPEAK
+</button>
+
+<div id="answer">
+Hello Sir! I am ready.
+</div>
+
+<button id="gemini" onclick="openGemini()">
+🤖 OPEN GEMINI
+</button>
+
+<p class="small">
+JARVIS AI • BILINGUAL VOICE SYSTEM
+</p>
+
+</div>
+
 <script>
-function openGemini() {
-  window.location.href = "https://gemini.google.com/app";
+
+let selectedLanguage = "bn-IN";
+let recognition = null;
+
+function setLanguage(lang){
+
+ selectedLanguage = lang;
+
+ if(lang === "bn-IN"){
+  speak("বাংলা ভাষা নির্বাচন করা হয়েছে।");
+ }else{
+  speak("English language selected.");
+ }
+
 }
+
+function speak(text){
+
+ document.getElementById("answer").innerText = text;
+
+ if(!("speechSynthesis" in window)){
+  return;
+ }
+
+ speechSynthesis.cancel();
+
+ let msg = new SpeechSynthesisUtterance(text);
+
+ msg.lang = selectedLanguage;
+ msg.rate = 0.95;
+ msg.pitch = 1;
+
+ speechSynthesis.speak(msg);
+
+}
+
+function startJarvis(){
+
+ const SR =
+ window.SpeechRecognition ||
+ window.webkitSpeechRecognition;
+
+ if(!SR){
+  speak("এই ব্রাউজারে ভয়েস রিকগনিশন পাওয়া যাচ্ছে না।");
+  return;
+ }
+
+ if(recognition){
+  recognition.abort();
+ }
+
+ recognition = new SR();
+
+ recognition.lang = selectedLanguage;
+ recognition.continuous = false;
+ recognition.interimResults = false;
+ recognition.maxAlternatives = 1;
+
+ recognition.onstart = function(){
+
+  document.getElementById("status").innerText =
+  "LISTENING...";
+
+ };
+
+ recognition.onresult = function(event){
+
+  let q =
+  event.results[0][0].transcript.toLowerCase();
+
+  document.getElementById("answer").innerText =
+  "You said: " + q;
+
+  let a;
+
+  if(
+   q.includes("হ্যালো") ||
+   q.includes("hello") ||
+   q.includes("hi")
+  ){
+
+   a = selectedLanguage === "bn-IN"
+   ? "হ্যালো স্যার! আমি জার্ভিস।"
+   : "Hello Sir! I am JARVIS.";
+
+  }
+
+  else if(
+   q.includes("নাম") ||
+   q.includes("name")
+  ){
+
+   a = selectedLanguage === "bn-IN"
+   ? "আমার নাম JARVIS।"
+   : "My name is JARVIS.";
+
+  }
+
+  else if(
+   q.includes("সময়") ||
+   q.includes("time")
+  ){
+
+   let t = new Date().toLocaleTimeString(
+    selectedLanguage
+   );
+
+   a = selectedLanguage === "bn-IN"
+   ? "এখন সময় " + t
+   : "The current time is " + t;
+
+  }
+
+  else if(
+   q.includes("তারিখ") ||
+   q.includes("date")
+   || q.includes("আজ")
+  ){
+
+   let d = new Date().toLocaleDateString(
+    selectedLanguage
+   );
+
+   a = selectedLanguage === "bn-IN"
+   ? "আজকের তারিখ " + d
+   : "Today's date is " + d;
+
+  }
+
+  else if(
+   q.includes("gemini") ||
+   q.includes("জেমিনি")
+  ){
+
+   a = selectedLanguage === "bn-IN"
+   ? "জেমিনি খুলছি স্যার।"
+   : "Opening Gemini Sir.";
+
+   speak(a);
+
+   setTimeout(openGemini, 1200);
+
+   return;
+
+  }
+
+  else if(
+   q.includes("বন্ধ") ||
+   q.includes("stop")
+  ){
+
+   a = selectedLanguage === "bn-IN"
+   ? "ঠিক আছে স্যার।"
+   : "Okay Sir.";
+
+  }
+
+  else{
+
+   a = selectedLanguage === "bn-IN"
+   ? "আপনার কথা শুনেছি। এই বিষয়ে আরও AI ক্ষমতা পরে যুক্ত হবে।"
+   : "I heard you. More AI capabilities will be added later.";
+
+  }
+
+  speak(a);
+
+ };
+
+ recognition.onerror = function(){
+
+  document.getElementById("status").innerText =
+  "VOICE ERROR";
+
+ };
+
+ recognition.onend = function(){
+
+  document.getElementById("status").innerText =
+  "SYSTEM ONLINE";
+
+ };
+
+ try{
+  recognition.start();
+ }catch(e){
+  speak("আবার চেষ্টা করুন স্যার।");
+ }
+
+}
+
+function stopJarvis(){
+
+ if(recognition){
+  recognition.abort();
+  recognition = null;
+ }
+
+ if("speechSynthesis" in window){
+  speechSynthesis.cancel();
+ }
+
+ document.getElementById("status").innerText =
+ "SYSTEM ONLINE";
+
+ document.getElementById("answer").innerText =
+ "JARVIS stopped.";
+
+}
+
+function openGemini(){
+
+ window.location.href =
+ "https://gemini.google.com/app";
+
+}
+
 </script>
+
+</body>
 </html>
