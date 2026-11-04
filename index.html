@@ -4,388 +4,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS AI</title>
+<title>J.A.R.V.I.S AI</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- background:#030914;
- color:#00d9ff;
- font-family:Arial,sans-serif;
- text-align:center;
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Segoe UI, sans-serif;
 }
 
-.container{width:100%;padding:20px}
-
-h1{
- letter-spacing:8px;
- text-shadow:0 0 15px #00cfff;
+body {
+    background: #080d18;
+    color: #00eaff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.core{
- width:210px;
- height:210px;
- border-radius:50%;
- margin:30px auto;
- border:3px solid #00d9ff;
- box-shadow:0 0 20px #00d9ff,inset 0 0 25px #007bff;
- display:flex;
- align-items:center;
- justify-content:center;
- animation:pulse 2s infinite;
+header {
+    text-align: center;
+    padding: 25px 10px;
+    border-bottom: 1px solid #12516a;
 }
 
-.core span{font-size:65px}
-
-@keyframes pulse{
- 50%{
-  box-shadow:0 0 45px #00d9ff,
-  inset 0 0 35px #007bff;
- }
+.logo {
+    font-size: 38px;
+    letter-spacing: 9px;
+    text-shadow: 0 0 20px #00eaff;
 }
 
-button{
- background:#003b60;
- color:#00eaff;
- border:1px solid #00d9ff;
- padding:14px 20px;
- border-radius:30px;
- font-size:16px;
- margin:7px;
- cursor:pointer;
+.subtitle {
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-top: 8px;
 }
 
-#answer{
- margin:20px auto;
- padding:15px;
- border:1px solid #007bff;
- border-radius:12px;
- min-height:60px;
- color:white;
+.status {
+    margin-top: 12px;
+    color: #00ff9d;
 }
 
-.small{color:#75a9c5;font-size:13px}
-
-#gemini{
- background:#4285f4;
- color:white;
- border:0;
+.arc {
+    width: 130px;
+    height: 130px;
+    border: 3px solid #00eaff;
+    border-radius: 50%;
+    margin: 25px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px #00eaff,
+    inset 0 0 20px #00eaff;
+    animation: glow 3s infinite;
 }
 
+.arc span {
+    font-size: 40px;
+}
+
+@keyframes glow {
+    50% { box-shadow: 0 0 45px #00eaff,
+    inset 0 0 30px #00eaff; }
+}
+
+.container {
+    width: 100%;
+    max-width: 750px;
+    margin: auto;
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    height: 45vh;
+    min-height: 250px;
+    overflow-y: auto;
+    background: #0b1422;
+    border: 1px solid #12516a;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.message {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.bot {
+    background: #102d3b;
+    border-left: 3px solid #00eaff;
+    color: #d4faff;
+}
+
+.user {
+    background: #123c42;
+    border-right: 3px solid #00ff9d;
+    color: white;
+    text-align: right;
+}
+
+.input-area {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px;
+    background: #101e30;
+    border: 1px solid #00eaff;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+}
+
+button {
+    background: #00cde8;
+    color: #00131a;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.controls button {
+    flex: 1;
+    background: #102d3b;
+    color: #00eaff;
+    border: 1px solid #00eaff;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    color: #537d8a;
+    font-size: 11px;
+}
 </style>
 </head>
 
 <body>
 
+<header>
+    <div class="logo">J.A.R.V.I.S</div>
+    <div class="subtitle">
+        JUST A RATHER VERY INTELLIGENT SYSTEM
+    </div>
+    <div class="status" id="status">
+        ● SYSTEM ONLINE
+    </div>
+</header>
+
+<div class="arc">
+    <span>J</span>
+</div>
+
 <div class="container">
 
-<h1>J.A.R.V.I.S</h1>
+    <div class="chat-box" id="chatBox">
+        <div class="message bot">
+            নমস্কার! আমি JARVIS।<br>
+            তোমার AI Assistant।<br>
+            আমাকে কিছু জিজ্ঞাসা করো।
+        </div>
+    </div>
 
-<p class="small">
-JUST A RATHER VERY INTELLIGENT SYSTEM
-</p>
+    <div class="input-area">
+        <input id="userInput"
+        type="text"
+        placeholder="এখানে কিছু লেখো...">
+        <button onclick="sendMessage()">SEND</button>
+    </div>
 
-<div class="core"><span>◉</span></div>
-
-<h2 id="status">SYSTEM ONLINE</h2>
-
-<p>SELECT LANGUAGE</p>
-
-<button onclick="setLanguage('bn-IN')">
-বাংলা
-</button>
-
-<button onclick="setLanguage('en-IN')">
-English
-</button>
-
-<br>
-
-<button onclick="startJarvis()">
-🎙️ TALK TO JARVIS
-</button>
-
-<button onclick="stopJarvis()">
-⏹️ STOP
-</button>
-
-<button onclick="speak('Hello! I am JARVIS.')">
-🔊 SPEAK
-</button>
-
-<div id="answer">
-Hello Sir! I am ready.
-</div>
-
-<button id="gemini" onclick="openGemini()">
-🤖 OPEN GEMINI
-</button>
-
-<p class="small">
-JARVIS AI • BILINGUAL VOICE SYSTEM
-</p>
+    <div class="controls">
+        <button onclick="startListening()">🎤 SPEAK</button>
+        <button onclick="stopSpeaking()">🔇 STOP</button>
+    </div>
 
 </div>
+
+<footer>
+    J.A.R.V.I.S AI SYSTEM | VERSION 1.0
+</footer>
 
 <script>
+const chatBox = document.getElementById("chatBox");
+const input = document.getElementById("userInput");
+const statusText = document.getElementById("status");
 
-let selectedLanguage = "bn-IN";
-let recognition = null;
+let history = [];
+let busy = false;
 
-function setLanguage(lang){
-
- selectedLanguage = lang;
-
- if(lang === "bn-IN"){
-  speak("বাংলা ভাষা নির্বাচন করা হয়েছে।");
- }else{
-  speak("English language selected.");
- }
-
+function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = "message " + type;
+    div.textContent = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    return div;
 }
 
-function speak(text){
+async function sendMessage() {
+    const message = input.value.trim();
 
- document.getElementById("answer").innerText = text;
+    if (!message || busy) return;
 
- if(!("speechSynthesis" in window)){
-  return;
- }
+    addMessage(message, "user");
+    input.value = "";
 
- speechSynthesis.cancel();
+    const thinking = addMessage(
+        "JARVIS চিন্তা করছে...", "bot"
+    );
 
- let msg = new SpeechSynthesisUtterance(text);
+    busy = true;
+    statusText.textContent = "● PROCESSING...";
 
- msg.lang = selectedLanguage;
- msg.rate = 0.95;
- msg.pitch = 1;
+    try {
+        const response = await fetch(
+            "https://YOUR-BACKEND-URL/api/chat",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message,
+                    history: history
+                })
+            }
+        );
 
- speechSynthesis.speak(msg);
+        if (!response.ok) throw new Error("Backend error");
 
+        const data = await response.json();
+
+        if (!data.reply) throw new Error("No reply");
+
+        thinking.textContent = data.reply;
+
+        history.push(
+            { role: "user", content: message },
+            { role: "assistant", content: data.reply }
+        );
+
+        speak(data.reply);
+
+        statusText.textContent = "● SYSTEM ONLINE";
+
+    } catch (error) {
+        thinking.textContent =
+            "আমার AI Brain এখনো সংযুক্ত হয়নি। Backend চালু হলে উত্তর দিতে পারব।";
+
+        statusText.textContent = "● BRAIN NOT CONNECTED";
+
+    } finally {
+        busy = false;
+    }
 }
 
-function startJarvis(){
+input.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") sendMessage();
+});
 
- const SR =
- window.SpeechRecognition ||
- window.webkitSpeechRecognition;
+function speak(text) {
+    if (!("speechSynthesis" in window)) return;
 
- if(!SR){
-  speak("এই ব্রাউজারে ভয়েস রিকগনিশন পাওয়া যাচ্ছে না।");
-  return;
- }
+    speechSynthesis.cancel();
 
- if(recognition){
-  recognition.abort();
- }
+    const speech = new SpeechSynthesisUtterance(text);
+    speech.lang = "bn-IN";
+    speech.rate = 1;
 
- recognition = new SR();
-
- recognition.lang = selectedLanguage;
- recognition.continuous = false;
- recognition.interimResults = false;
- recognition.maxAlternatives = 1;
-
- recognition.onstart = function(){
-
-  document.getElementById("status").innerText =
-  "LISTENING...";
-
- };
-
- recognition.onresult = function(event){
-
-  let q =
-  event.results[0][0].transcript.toLowerCase();
-
-  document.getElementById("answer").innerText =
-  "You said: " + q;
-
-  let a;
-
-  if(
-   q.includes("হ্যালো") ||
-   q.includes("hello") ||
-   q.includes("hi")
-  ){
-
-   a = selectedLanguage === "bn-IN"
-   ? "হ্যালো স্যার! আমি জার্ভিস।"
-   : "Hello Sir! I am JARVIS.";
-
-  }
-
-  else if(
-   q.includes("নাম") ||
-   q.includes("name")
-  ){
-
-   a = selectedLanguage === "bn-IN"
-   ? "আমার নাম JARVIS।"
-   : "My name is JARVIS.";
-
-  }
-
-  else if(
-   q.includes("সময়") ||
-   q.includes("time")
-  ){
-
-   let t = new Date().toLocaleTimeString(
-    selectedLanguage
-   );
-
-   a = selectedLanguage === "bn-IN"
-   ? "এখন সময় " + t
-   : "The current time is " + t;
-
-  }
-
-  else if(
-   q.includes("তারিখ") ||
-   q.includes("date")
-   || q.includes("আজ")
-  ){
-
-   let d = new Date().toLocaleDateString(
-    selectedLanguage
-   );
-
-   a = selectedLanguage === "bn-IN"
-   ? "আজকের তারিখ " + d
-   : "Today's date is " + d;
-
-  }
-
-  else if(
-   q.includes("gemini") ||
-   q.includes("জেমিনি")
-  ){
-
-   a = selectedLanguage === "bn-IN"
-   ? "জেমিনি খুলছি স্যার।"
-   : "Opening Gemini Sir.";
-
-   speak(a);
-
-   setTimeout(openGemini, 1200);
-
-   return;
-
-  }
-
-  else if(
-   q.includes("বন্ধ") ||
-   q.includes("stop")
-  ){
-
-   a = selectedLanguage === "bn-IN"
-   ? "ঠিক আছে স্যার।"
-   : "Okay Sir.";
-
-  }
-
-  else{
-
-   a = selectedLanguage === "bn-IN"
-   ? "আপনার কথা শুনেছি। এই বিষয়ে আরও AI ক্ষমতা পরে যুক্ত হবে।"
-   : "I heard you. More AI capabilities will be added later.";
-
-  }
-
-  speak(a);
-
- };
-
- recognition.onerror = function(){
-
-  document.getElementById("status").innerText =
-  "VOICE ERROR";
-
- };
-
- recognition.onend = function(){
-
-  document.getElementById("status").innerText =
-  "SYSTEM ONLINE";
-
- };
-
- try{
-  recognition.start();
- }catch(e){
-  speak("আবার চেষ্টা করুন স্যার।");
- }
-
+    speechSynthesis.speak(speech);
 }
 
-function stopJarvis(){
-
- if(recognition){
-  recognition.abort();
-  recognition = null;
- }
-
- if("speechSynthesis" in window){
-  speechSynthesis.cancel();
- }
-
- document.getElementById("status").innerText =
- "SYSTEM ONLINE";
-
- document.getElementById("answer").innerText =
- "JARVIS stopped.";
-
+function stopSpeaking() {
+    if ("speechSynthesis" in window) {
+        speechSynthesis.cancel();
+    }
 }
 
-function openGemini(){
+function startListening() {
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
- window.location.href =
- "https://gemini.google.com/app";
+    if (!SpeechRecognition) {
+        alert("Voice Recognition এই ব্রাউজারে পাওয়া যাচ্ছে না।");
+        return;
+    }
 
-}
+    const recognition = new SpeechRecognition();
+    recognition.lang = "bn-IN";
 
-</script>
+    statusText.textContent = "● LISTENING...";
 
-</body><div style="margin:20px auto;max-width:600px;padding:15px;">
-  <h2>JARVIS CHAT</h2>
-  <div id="chatBox" style="height:180px;overflow:auto;background:#071525;border:1px solid #00d9ff;padding:10px;color:white;text-align:left;">
-    JARVIS: Hello! Ask me anything.
-  </div>
-  <input id="chatInput" placeholder="বাংলায় প্রশ্ন লেখো..."
-    style="width:65%;padding:12px;background:#071525;color:white;border:1px solid #00d9ff;">
-  <button onclick="sendChat()" style="padding:12px;background:#00d9ff;">
-    SEND
-  </button>
-</div>
+    recognition.onresult = function(event) {
+        input.value = event.results[0][0].transcript;
+        sendMessage();
+    };
 
-<script>
-function sendChat(){
-  const input = document.getElementById("chatInput");
-  const box = document.getElementById("chatBox");
-  const msg = input.value.trim();
+    recognition.onend = function() {
+        statusText.textContent = "● SYSTEM ONLINE";
+    };
 
-  if (!msg) return;
-
-  const userText = document.createElement("p");
-  userText.textContent = "You: " + msg;
-  box.appendChild(userText);
-
-  const jarvisText = document.createElement("p");
-  jarvisText.textContent = "JARVIS: Gemini খুলছি...";
-  box.appendChild(jarvisText);
-
-  const url = "https://gemini.google.com/app?q=" + encodeURIComponent(msg);
-  window.open(url, "_blank");
-
-  input.value = "";
-  box.scrollTop = box.scrollHeight;
+    recognition.start();
 }
 </script>
+
+</body>
 </html>
