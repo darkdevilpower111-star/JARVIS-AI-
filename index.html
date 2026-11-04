@@ -353,5 +353,28 @@ function openGemini(){
 
 </script>
 
-</body>
+</body><div style="margin:20px auto;max-width:600px;padding:15px;">
+  <h2>JARVIS CHAT</h2>
+  <div id="chatBox" style="height:180px;overflow:auto;background:#071525;border:1px solid #00d9ff;padding:10px;color:white;text-align:left;">
+    JARVIS: Hello! Ask me anything.
+  </div>
+  <input id="chatInput" placeholder="বাংলায় প্রশ্ন লেখো..."
+    style="width:65%;padding:12px;background:#071525;color:white;border:1px solid #00d9ff;">
+  <button onclick="sendChat()" style="padding:12px;background:#00d9ff;">
+    SEND
+  </button>
+</div>
+
+<script>
+function sendChat(){
+  const input=document.getElementById("chatInput");
+  const box=document.getElementById("chatBox");
+  const msg=input.value.trim();
+  if(!msg)return;
+  box.innerHTML += "<p>You: "+msg.replace(/</g,"&lt;")+"</p>";
+  box.innerHTML += "<p>JARVIS: তোমার প্রশ্ন পেয়েছি। AI Brain এখনো যুক্ত করা বাকি।</p>";
+  input.value="";
+  box.scrollTop=box.scrollHeight;
+}
+</script>
 </html>
