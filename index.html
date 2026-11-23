@@ -5,12 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080812">
-<title>JARVIS AI</title>
+<title>JARVIS AI - KOYEL</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -74,7 +72,6 @@ main {
 }
 
 @keyframes pulse {
-  from { transform: scale(1); }
   to { transform: scale(1.04); }
 }
 
@@ -150,11 +147,6 @@ button {
   background: linear-gradient(120deg,#ff174d,#087cff);
 }
 
-.mic-area {
-  text-align: center;
-  margin-top: 22px;
-}
-
 #mic {
   width: 70px;
   height: 70px;
@@ -165,8 +157,9 @@ button {
   box-shadow: 0 0 20px #087cff;
 }
 
-#mic:active {
-  transform: scale(.92);
+.mic-area {
+  text-align: center;
+  margin-top: 22px;
 }
 
 #reply {
@@ -188,7 +181,6 @@ button {
 <body>
 
 <header>J.A.R.V.I.S</header>
-
 <div class="status">● SYSTEM ONLINE</div>
 
 <main>
@@ -208,7 +200,7 @@ button {
 
 <div class="controls">
   <input id="message" placeholder="Ask KOYEL anything...">
-  <button class="send" onclick="sendMessage()">Send</button>
+  <button class="send" id="sendBtn" onclick="sendMessage()">Send</button>
 </div>
 
 <div class="mic-area">
@@ -225,9 +217,12 @@ button {
 </div>
 
 <script>
-const API_URL = "/api/chat";
+
+// BACKEND CONNECTION
+const API_URL = "https://jarvis-ai-5-umud.onrender.com/api/chat";
 
 let history = [];
+let busy = false;
 
 function addMessage(text, type) {
   const chat = document.getElementById("chat");
@@ -242,8 +237,11 @@ function addMessage(text, type) {
 
 async function sendMessage() {
 
+  if (busy) return;
+
   const input = document.getElementById("message");
   const reply = document.getElementById("reply");
+  const sendBtn = document.getElementById("sendBtn");
 
   const msg = input.value.trim();
 
@@ -252,6 +250,8 @@ async function sendMessage() {
   addMessage(msg, "user");
   input.value = "";
 
+  busy = true;
+  sendBtn.disabled = true;
   reply.innerText = "KOYEL is thinking...";
 
   try {
@@ -273,8 +273,7 @@ async function sendMessage() {
 
     const data = await response.json();
 
-    const answer =
-      data.reply || data.response || data.answer;
+    const answer = data.reply || data.response || data.answer;
 
     if (!answer) {
       throw new Error("AI response পাওয়া যায়নি");
@@ -294,13 +293,18 @@ async function sendMessage() {
   } catch (error) {
 
     addMessage(
-      "AI Brain সংযোগ করা যাচ্ছে না। Backend পরীক্ষা করো।",
+      "AI Brain সংযোগ করা যাচ্ছে না। আবার চেষ্টা করো।",
       "bot"
     );
 
     reply.innerText = "● CONNECTION ERROR";
-
     console.error(error);
+
+  } finally {
+
+    busy = false;
+    sendBtn.disabled = false;
+
   }
 }
 
@@ -336,7 +340,6 @@ function speak() {
   recognition.onresult = function(event) {
     document.getElementById("message").value =
       event.results[0][0].transcript;
-
     sendMessage();
   };
 
@@ -362,7 +365,7 @@ function speakReply(text) {
 
   window.speechSynthesis.speak(speech);
 }
-</script>
 
+</script>
 </body>
 </html>
