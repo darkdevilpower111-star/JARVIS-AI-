@@ -4,326 +4,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S AI</title>
+<title>KOYEL AI</title>
 
 <style>
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Segoe UI, sans-serif;
+  box-sizing: border-box;
 }
-
 body {
-    background: #080d18;
-    color: #00eaff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  margin: 0;
+  background: #080812;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
 }
-
 header {
-    text-align: center;
-    padding: 25px 10px;
-    border-bottom: 1px solid #12516a;
+  padding: 22px;
+  color: #ff3155;
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 3px;
 }
-
-.logo {
-    font-size: 38px;
-    letter-spacing: 9px;
-    text-shadow: 0 0 20px #00eaff;
-}
-
-.subtitle {
-    font-size: 11px;
-    letter-spacing: 3px;
-    margin-top: 8px;
-}
-
 .status {
-    margin-top: 12px;
-    color: #00ff9d;
+  color: #28aaff;
+  font-size: 13px;
 }
-
-.arc {
-    width: 130px;
-    height: 130px;
-    border: 3px solid #00eaff;
-    border-radius: 50%;
-    margin: 25px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 30px #00eaff,
-    inset 0 0 20px #00eaff;
-    animation: glow 3s infinite;
+.character {
+  width: 190px;
+  height: 190px;
+  margin: 65px auto 25px;
+  border-radius: 50%;
+  border: 3px solid #168bff;
+  box-shadow: 0 0 25px #087cff, 0 0 45px #ff174d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 75px;
+  animation: glow 2s infinite alternate;
 }
-
-.arc span {
-    font-size: 40px;
-}
-
 @keyframes glow {
-    50% { box-shadow: 0 0 45px #00eaff,
-    inset 0 0 30px #00eaff; }
+  from {box-shadow: 0 0 15px #087cff;}
+  to {box-shadow: 0 0 35px #ff174d;}
 }
-
-.container {
-    width: 100%;
-    max-width: 750px;
-    margin: auto;
-    padding: 15px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+h2 {
+  color: #ff3155;
 }
-
-.chat-box {
-    height: 45vh;
-    min-height: 250px;
-    overflow-y: auto;
-    background: #0b1422;
-    border: 1px solid #12516a;
-    border-radius: 12px;
-    padding: 15px;
+p {
+  color: #9bbaff;
 }
-
-.message {
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    line-height: 1.6;
-    overflow-wrap: anywhere;
+#mic {
+  margin-top: 30px;
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  border: 2px solid #168bff;
+  background: linear-gradient(135deg,#ff174d,#087cff);
+  color: white;
+  font-size: 32px;
 }
-
-.bot {
-    background: #102d3b;
-    border-left: 3px solid #00eaff;
-    color: #d4faff;
-}
-
-.user {
-    background: #123c42;
-    border-right: 3px solid #00ff9d;
-    color: white;
-    text-align: right;
-}
-
-.input-area {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-}
-
 input {
-    flex: 1;
-    min-width: 0;
-    padding: 14px;
-    background: #101e30;
-    border: 1px solid #00eaff;
-    border-radius: 10px;
-    color: white;
-    outline: none;
+  width: 75%;
+  padding: 14px;
+  margin-top: 35px;
+  border-radius: 25px;
+  border: 1px solid #168bff;
+  background: #151526;
+  color: white;
 }
-
 button {
-    background: #00cde8;
-    color: #00131a;
-    border: none;
-    border-radius: 10px;
-    padding: 12px;
-    font-weight: bold;
-    cursor: pointer;
+  cursor: pointer;
 }
-
-.controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-}
-
-.controls button {
-    flex: 1;
-    background: #102d3b;
-    color: #00eaff;
-    border: 1px solid #00eaff;
-}
-
-footer {
-    text-align: center;
-    padding: 15px;
-    color: #537d8a;
-    font-size: 11px;
+#reply {
+  margin: 25px;
+  color: white;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">J.A.R.V.I.S</div>
-    <div class="subtitle">
-        JUST A RATHER VERY INTELLIGENT SYSTEM
-    </div>
-    <div class="status" id="status">
-        ● SYSTEM ONLINE
-    </div>
-</header>
+<header>KOYEL AI</header>
+<div class="status">● SYSTEM ONLINE</div>
 
-<div class="arc">
-    <span>J</span>
-</div>
+<div class="character">👩🏻</div>
 
-<div class="container">
+<h2>Hello, I'm KOYEL</h2>
+<p>Your Personal AI Assistant</p>
 
-    <div class="chat-box" id="chatBox">
-        <div class="message bot">
-            নমস্কার! আমি JARVIS।<br>
-            তোমার AI Assistant।<br>
-            আমাকে কিছু জিজ্ঞাসা করো।
-        </div>
-    </div>
+<input id="message" placeholder="Message KOYEL AI...">
+<button onclick="sendMessage()">Send</button>
 
-    <div class="input-area">
-        <input id="userInput"
-        type="text"
-        placeholder="এখানে কিছু লেখো...">
-        <button onclick="sendMessage()">SEND</button>
-    </div>
+<br>
 
-    <div class="controls">
-        <button onclick="startListening()">🎤 SPEAK</button>
-        <button onclick="stopSpeaking()">🔇 STOP</button>
-    </div>
+<button id="mic" onclick="speak()">🎙️</button>
 
-</div>
-
-<footer>
-    J.A.R.V.I.S AI SYSTEM | VERSION 1.0
-</footer>
+<div id="reply">আমি তোমার কথা শোনার জন্য প্রস্তুত।</div>
 
 <script>
-const chatBox = document.getElementById("chatBox");
-const input = document.getElementById("userInput");
-const statusText = document.getElementById("status");
+function sendMessage() {
+  let msg = document.getElementById("message").value;
+  if (!msg.trim()) return;
 
-let history = [];
-let busy = false;
-
-function addMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = "message " + type;
-    div.textContent = text;
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-    return div;
+  document.getElementById("reply").innerText =
+    "তুমি বলেছ: " + msg +
+    " | AI Brain এখনো সংযুক্ত হয়নি।";
 }
 
-async function sendMessage() {
-    const message = input.value.trim();
+function speak() {
+  if (!("webkitSpeechRecognition" in window ||
+        "SpeechRecognition" in window)) {
+    document.getElementById("reply").innerText =
+      "তোমার Browser-এ Voice Recognition পাওয়া যায়নি।";
+    return;
+  }
 
-    if (!message || busy) return;
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-    addMessage(message, "user");
-    input.value = "";
+  let recognition = new SpeechRecognition();
+  recognition.lang = "bn-IN";
+  recognition.start();
 
-    const thinking = addMessage(
-        "JARVIS চিন্তা করছে...", "bot"
-    );
-
-    busy = true;
-    statusText.textContent = "● PROCESSING...";
-
-    try {
-        const response = await fetch(
-            "https://jarvis-ai-3-4aa8.onrender.com/api/chat",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: message,
-                    history: history
-                })
-            }
-        );
-
-        if (!response.ok) throw new Error("Backend error");
-
-        const data = await response.json();
-
-        if (!data.reply) throw new Error("No reply");
-
-        thinking.textContent = data.reply;
-
-        history.push(
-            { role: "user", content: message },
-            { role: "assistant", content: data.reply }
-        );
-
-        speak(data.reply);
-
-        statusText.textContent = "● SYSTEM ONLINE";
-
-    } catch (error) {
-        thinking.textContent =
-            "আমার AI Brain এখনো সংযুক্ত হয়নি। Backend চালু হলে উত্তর দিতে পারব।";
-
-        statusText.textContent = "● BRAIN NOT CONNECTED";
-
-    } finally {
-        busy = false;
-    }
-}
-
-input.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") sendMessage();
-});
-
-function speak(text) {
-    if (!("speechSynthesis" in window)) return;
-
-    speechSynthesis.cancel();
-
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "bn-IN";
-    speech.rate = 1;
-
-    speechSynthesis.speak(speech);
-}
-
-function stopSpeaking() {
-    if ("speechSynthesis" in window) {
-        speechSynthesis.cancel();
-    }
-}
-
-function startListening() {
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-        alert("Voice Recognition এই ব্রাউজারে পাওয়া যাচ্ছে না।");
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "bn-IN";
-
-    statusText.textContent = "● LISTENING...";
-
-    recognition.onresult = function(event) {
-        input.value = event.results[0][0].transcript;
-        sendMessage();
-    };
-
-    recognition.onend = function() {
-        statusText.textContent = "● SYSTEM ONLINE";
-    };
-
-    recognition.start();
+  recognition.onresult = function(event) {
+    document.getElementById("message").value =
+      event.results[0][0].transcript;
+    sendMessage();
+  };
 }
 </script>
 
